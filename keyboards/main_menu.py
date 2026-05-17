@@ -3,15 +3,14 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 main_keyboard = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text="🔥 Top Discounts"),
-            KeyboardButton(text="🆓 Free Games")
+            KeyboardButton(text="🔥 Топ скидки"),
+            KeyboardButton(text="🆓 Бесплатные игры")
         ],
         [
-            KeyboardButton(text="🚀 Upcoming Games"),
-            KeyboardButton(text="🔍 Search Game")
+            KeyboardButton(text="🚀 Предстоящие игры"),
+            KeyboardButton(text="🔍 Найти игру")
         ],
         [
-            KeyboardButton(text="❤️ Favorites"),
             KeyboardButton(text="ℹ️ Help")
         ]
     ],
