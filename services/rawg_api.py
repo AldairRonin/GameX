@@ -30,3 +30,14 @@ async def search_game(game_name):
             data = await response.json()
             return data["results"]
 
+async def get_game_details(game_id):
+
+    url = f"{BASE_URL}/{game_id}"
+
+    params = {
+        "key": RAWG_API_KEY
+    }
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, params=params) as response:
+            return await response.json()

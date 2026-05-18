@@ -1,9 +1,12 @@
 from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
-
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from states.search_state import SearchGameState
-from services.rawg_api import search_game
+from services.rawg_api import (
+    search_game,
+    get_game_details
+)
 
 router = Router()
 
@@ -28,15 +31,57 @@ async def process_game_search(message: Message, state: FSMContext):
     game = games[0]
 
     title = game["name"]
-    rating = game["rating"]
-    released = game["released"]
+    metacritic = game.get("metacritic", "N/A")
+    released = game.get("released", "Неизвестно")
+    genres = ", ".join(
+        genre["name"] for genre in game["genres"]
+    )
+    details = await get_game_details(game["id"])
+    description = details.get(
+        "description_raw",
+        "Описание отсутствует."
+    )
+    description = description[:200] + "..."
+
 
     response_text = (
         f"🎮 {title}\n"
-        f"⭐ Оценка: {rating}\n"
-        f"📅 Выход: {released}"
+        f"⭐ Оценка на Metacritic: {metacritic}\n"
+        f"📅 Выход: {released}\n"
+        f"🎯 Жанры: {genres}\n"
+        f"📖 Описание: {description}"
     )
 
-    await message.answer(response_text)
+    image_url = game.get("background_image")
+
+    slug = game["slug"]
+
+    steam_url = (
+        f"https://store.steampowered.com/search/?term={slug}"
+    )
+
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="🛒 Страница в Steam",
+                    url=steam_url
+                )
+            ]
+        ]
+    )
+
+    if image_url:
+        await message.answer_photo(
+            photo=image_url,
+            caption=response_text,
+            reply_markup = keyboard
+        )
+    else:
+        await message.answer(
+            response_text,
+            reply_markup=keyboard
+        )
+
 
     await state.clear()
