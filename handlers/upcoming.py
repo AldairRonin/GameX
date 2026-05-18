@@ -17,8 +17,7 @@ async def upcoming_games(message: Message):
 
         response_text += (
             f"🎮 {title}\n"
-            f"📅 Release: {release_date}\n"
-            f"⭐ Rating: {rating}\n\n"
+            f"📅 Выход: {release_date}\n\n"
         )
 
     await message.answer(response_text)

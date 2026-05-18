@@ -16,3 +16,17 @@ async def get_upcoming_games():
         async with session.get(BASE_URL, params=params) as response:
             data = await response.json()
             return data["results"]
+
+async def search_game(game_name):
+
+    params = {
+        "key": RAWG_API_KEY,
+        "search": game_name,
+        "page_size": 1
+    }
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(BASE_URL, params=params) as response:
+            data = await response.json()
+            return data["results"]
+
