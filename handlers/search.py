@@ -4,7 +4,7 @@ from aiogram.types import Message
 router = Router()
 
 @router.message(F.text == "🔍 Найти игру")
-async def free_games(message: Message):
+async def search(message: Message):
     await message.answer(
         "Напиши мне название игры в Steam"
     )

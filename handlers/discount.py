@@ -5,7 +5,7 @@ from services.cheapshark_api import get_top_discounts
 router = Router()
 
 @router.message(F.text == "🔥 Топ скидки")
-async def start_command(message: Message):
+async def discount(message: Message):
 
     deals = await get_top_discounts()
     response_text = "🔥 Топ скидок:\n\n"
