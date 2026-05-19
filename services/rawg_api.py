@@ -6,9 +6,9 @@ BASE_URL = "https://api.rawg.io/api/games"
 async def get_upcoming_games(page=1):
     params = {
         "key": RAWG_API_KEY,
-        "dates": "2025-01-01,2026-12-31",
-        "ordering": "released",
-        "page_size": 5,
+        "dates": "2026-05-19,2027-12-31",
+        "ordering": "-added",
+        "page_size": 7,
         "page": page
     }
 
