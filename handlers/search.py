@@ -5,9 +5,9 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from states.search_state import SearchGameState
 from services.rawg_api import (
     search_game,
-    get_game_details
+    get_game_details,
+    get_steam_url
 )
-from keyboards.main_menu import main_keyboard
 
 
 router = Router()
@@ -39,12 +39,17 @@ async def process_game_search(message: Message, state: FSMContext):
         genre["name"] for genre in game["genres"]
     )
     details = await get_game_details(game["id"])
+
+    steam_url = await get_steam_url(game["id"])
+    if not steam_url:
+        game_name = game["name"]
+        steam_url = f"https://store.steampowered.com/search/?term={game_name}"
+
     description = details.get(
         "description_raw",
         "Описание отсутствует."
     )
     description = description[:200] + "..."
-
 
     response_text = (
         f"🎮 {title}\n"
@@ -55,12 +60,6 @@ async def process_game_search(message: Message, state: FSMContext):
     )
 
     image_url = game.get("background_image")
-
-    slug = game["slug"]
-
-    steam_url = (
-        f"https://store.steampowered.com/search/?term={slug}"
-    )
 
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
@@ -77,14 +76,12 @@ async def process_game_search(message: Message, state: FSMContext):
         await message.answer_photo(
             photo=image_url,
             caption=response_text,
-            reply_markup = keyboard,
-
+            reply_markup=keyboard,
         )
     else:
         await message.answer(
             response_text,
             reply_markup=keyboard
         )
-
 
     await state.clear()

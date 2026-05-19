@@ -41,3 +41,20 @@ async def get_game_details(game_id):
     async with aiohttp.ClientSession() as session:
         async with session.get(url, params=params) as response:
             return await response.json()
+
+async def get_steam_url(game_id):
+    url = f"{BASE_URL}/{game_id}/stores"
+
+    params = {
+        "key": RAWG_API_KEY
+    }
+
+    STEAM_STORE_ID = 1
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, params=params) as response:
+            data = await response.json()
+            for store in data.get("results", []):
+                if store.get("store_id") == STEAM_STORE_ID:
+                    return store.get("url")
+    return None
