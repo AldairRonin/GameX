@@ -7,6 +7,8 @@ from services.rawg_api import (
     search_game,
     get_game_details
 )
+from keyboards.main_menu import main_keyboard
+
 
 router = Router()
 
@@ -75,7 +77,8 @@ async def process_game_search(message: Message, state: FSMContext):
         await message.answer_photo(
             photo=image_url,
             caption=response_text,
-            reply_markup = keyboard
+            reply_markup = main_keyboard,
+
         )
     else:
         await message.answer(
