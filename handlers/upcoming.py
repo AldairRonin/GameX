@@ -7,71 +7,62 @@ from services.rawg_api import get_upcoming_games
 router = Router()
 
 
-def create_keyboard(page: int):
+def get_keyboard(page: int):
     buttons = []
 
     if page > 1:
         buttons.append(
             InlineKeyboardButton(
                 text="⬅️",
-                callback_data=f"upcoming_{page - 1}"
+                callback_data=f"page_{page - 1}"
             )
         )
 
     buttons.append(
         InlineKeyboardButton(
             text="➡️",
-            callback_data=f"upcoming_{page + 1}"
+            callback_data=f"page_{page + 1}"
         )
     )
 
     return InlineKeyboardMarkup(inline_keyboard=[buttons])
 
 
-@router.message(F.text == "🚀 Предстоящие игры")
-async def upcoming_games(message: Message):
-
-    page = 1
+async def format_games(page: int):
     games = await get_upcoming_games(page)
 
-    response_text = "🚀 Предстоящие игры:\n\n"
+    text = "🚀 Предстоящие игры:\n\n"
 
     for game in games:
         title = game["name"]
         released = game.get("released", "Неизвестно")
 
-        response_text += (
-            f"🎮 {title}\n"
-            f"📅 {released}\n\n"
-        )
+        text += f"🎮 {title}\n📅 {released}\n\n"
+
+    return text
+
+
+@router.message(F.text == "🚀 Предстоящие игры")
+async def show_upcoming(message: Message):
+    page = 1
+
+    text = await format_games(page)
 
     await message.answer(
-        response_text,
-        reply_markup=create_keyboard(page)
+        text,
+        reply_markup=get_keyboard(page)
     )
 
 
-@router.callback_query(F.data.startswith("upcoming_"))
-async def change_page(callback: CallbackQuery):
-
+@router.callback_query(F.data.startswith("page_"))
+async def paginate(callback: CallbackQuery):
     page = int(callback.data.split("_")[1])
 
-    games = await get_upcoming_games(page)
-
-    response_text = "🚀 Предстоящие игры:\n\n"
-
-    for game in games:
-        title = game["name"]
-        released = game.get("released", "Неизвестно")
-
-        response_text += (
-            f"🎮 {title}\n"
-            f"📅 {released}\n\n"
-        )
+    text = await format_games(page)
 
     await callback.message.edit_text(
-        response_text,
-        reply_markup=create_keyboard(page)
+        text,
+        reply_markup=get_keyboard(page)
     )
 
     await callback.answer()

@@ -4,7 +4,6 @@ from config import RAWG_API_KEY
 BASE_URL = "https://api.rawg.io/api/games"
 
 async def get_upcoming_games(page=1):
-
     params = {
         "key": RAWG_API_KEY,
         "dates": "2025-01-01,2026-12-31",
