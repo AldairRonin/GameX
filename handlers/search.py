@@ -77,7 +77,7 @@ async def process_game_search(message: Message, state: FSMContext):
         await message.answer_photo(
             photo=image_url,
             caption=response_text,
-            reply_markup = main_keyboard,
+            reply_markup = keyboard,
 
         )
     else:
