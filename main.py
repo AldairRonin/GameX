@@ -6,6 +6,7 @@ from handlers.search import  router as search_router
 from handlers.discount import router as discount_router
 from handlers.free_games import router as free_games_router
 from handlers.upcoming import router as upcoming_router
+from handlers.help import router as help_router
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
@@ -15,6 +16,8 @@ dp.include_router(search_router)
 dp.include_router(discount_router)
 dp.include_router(free_games_router)
 dp.include_router(upcoming_router)
+dp.include_router(help_router)
+
 
 async def main():
     print("GameX bot started")
