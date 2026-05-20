@@ -5,7 +5,7 @@ BASE_URL = "https://www.cheapshark.com/api/1.0/deals"
 async def get_top_discounts(page=0):
     params = {
         "storeID": 1,
-        "pageSize": 5,
+        "pageSize": 8,
         "pageNumber": page,
         "sortBy": "Deal Rating"
     }
