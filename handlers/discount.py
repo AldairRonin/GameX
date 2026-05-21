@@ -35,13 +35,15 @@ async def format_discounts(page: int):
 
     for game in deals:
         title = game["title"]
-        sale_price = game["salePrice"]
-        normal_price = game["normalPrice"]
+        sale_price = float(game["salePrice"])
+        normal_price = float(game["normalPrice"])
         savings = round(float(game["savings"]))
+        kz_sale = round(sale_price * 471)
+        kz_normal = round(normal_price * 471)
 
         response_text += (
             f"🎮 {title}\n"
-            f"💸 ${sale_price} (вместо ${normal_price})\n"
+            f"💸 ₸{kz_sale} (вместо ₸{kz_normal})\n"
             f"🔥 Скидка: {savings}%\n\n"
         )
 
