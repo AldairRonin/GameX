@@ -1,6 +1,7 @@
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from datetime import date
 
 from services.rawg_api import get_upcoming_games
 
@@ -28,6 +29,20 @@ def get_keyboard(page: int):
     return InlineKeyboardMarkup(inline_keyboard=[buttons])
 
 
+def days_until(release_str: str) -> str:
+    try:
+        release_date = date.fromisoformat(release_str)
+        delta = (release_date - date.today()).days
+        if delta == 0:
+            return "🟢 Выходит сегодня!"
+        elif delta > 0:
+            return f"⏳ Через {delta} дн."
+        else:
+            return ""
+    except Exception:
+        return ""
+
+
 async def format_games(page: int):
     games = await get_upcoming_games(page)
 
@@ -36,8 +51,9 @@ async def format_games(page: int):
     for game in games:
         title = game["name"]
         released = game.get("released", "Неизвестно")
+        countdown = days_until(released) if released != "Неизвестно" else ""
 
-        text += f"🎮 {title}\n📅 {released}\n\n"
+        text += f"🎮 {title}\n📅 {released}  {countdown}\n\n"
 
     return text
 

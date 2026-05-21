@@ -7,7 +7,7 @@ async def get_upcoming_games(page=1):
     params = {
         "key": RAWG_API_KEY,
         "dates": "2026-05-19,2027-12-31",
-        "ordering": "-added",
+        "ordering": "released",
         "page_size": 7,
         "page": page
     }
