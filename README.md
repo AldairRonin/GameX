@@ -42,5 +42,7 @@ Built-in help system with feature explanations.
 
 # Roles
 Adilkhan Aldiyar-Backend/APIs
+
 Sarsenov Zhalgas - UI/UX/Deployment on Virtual Server
+
 Junis Sanzhar - Telegram Logic / FSM
