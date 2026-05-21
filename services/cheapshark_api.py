@@ -2,12 +2,12 @@ import aiohttp
 
 BASE_URL = "https://www.cheapshark.com/api/1.0/deals"
 
-async def get_top_discounts(page=0):
+async def get_top_discounts(page=0,sort_by="Deal Rating"):
     params = {
         "storeID": 1,
         "pageSize": 8,
         "pageNumber": page,
-        "sortBy": "Deal Rating"
+        "sortBy": sort_by
     }
 
     async with aiohttp.ClientSession() as session:
