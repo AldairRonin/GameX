@@ -18,7 +18,7 @@ sort_keyboard = InlineKeyboardMarkup(
         [
             InlineKeyboardButton(
                 text="🆕 Новые",
-                callback_data="sort_Recent"
+                callback_data="sort_recent"
             )
         ]
     ]
