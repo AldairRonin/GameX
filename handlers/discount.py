@@ -49,6 +49,9 @@ def get_keyboard(page: int, sort_by: str):
 async def format_discounts(page: int, sort_by: str = "Deal Rating"):
     deals = await get_top_discounts(page, sort_by)
 
+    if not deals:
+        return "⚠️ Не удалось загрузить скидки. Попробуйте позже."
+
     response_text = "🔥 Топ скидок:\n\n"
 
     for game in deals:
@@ -66,15 +69,12 @@ async def format_discounts(page: int, sort_by: str = "Deal Rating"):
     return response_text
 
 
-
 @router.message(F.text == "🔥 Топ скидки")
 async def discount(message: Message):
     await message.answer(
         "📊 Выберите способ сортировки:",
         reply_markup=sort_keyboard
     )
-
-
 
 
 @router.callback_query(F.data.startswith("sort_"))
@@ -91,7 +91,6 @@ async def choose_sort(callback: CallbackQuery):
     )
 
     await callback.answer()
-
 
 
 @router.callback_query(F.data.startswith("discount_"))
