@@ -12,13 +12,13 @@ sort_keyboard = InlineKeyboardMarkup(
         [
             InlineKeyboardButton(
                 text="⭐ Выгода",
-                callback_data="sort_Deal Rating"
+                callback_data="sort_Deal-Rating"
             )
         ],
         [
             InlineKeyboardButton(
                 text="🆕 Новые",
-                callback_data="sort_recent"
+                callback_data="sort_Recent"
             )
         ]
     ]
@@ -32,14 +32,14 @@ def get_keyboard(page: int, sort_by: str):
         buttons.append(
             InlineKeyboardButton(
                 text="⬅️",
-                callback_data=f"discount_{page - 1}_{sort_by}"
+                callback_data=f"discount_{page - 1}_{sort_by.replace(' ', '-')}"
             )
         )
 
     buttons.append(
         InlineKeyboardButton(
             text="➡️",
-            callback_data=f"discount_{page + 1}_{sort_by}"
+            callback_data=f"discount_{page + 1}_{sort_by.replace(' ', '-')}"
         )
     )
 
@@ -79,7 +79,7 @@ async def discount(message: Message):
 
 @router.callback_query(F.data.startswith("sort_"))
 async def choose_sort(callback: CallbackQuery):
-    sort_by = callback.data[5:]
+    sort_by = callback.data[5:].replace("-", " ")
 
     page = 0
 
@@ -99,7 +99,7 @@ async def paginate(callback: CallbackQuery):
     parts = callback.data.split("_")
 
     page = int(parts[1])
-    sort_by = "_".join(parts[2:])
+    sort_by = "_".join(parts[2:]).replace("-", " ")
 
     text = await format_discounts(page, sort_by)
 
